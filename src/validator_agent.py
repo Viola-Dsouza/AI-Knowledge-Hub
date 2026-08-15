@@ -54,7 +54,9 @@ Source Documents:
 OUTPUT FORMAT:
 Provide your response in EXACTLY the following two lines:
 STATUS: <SUPPORTED / PARTIALLY SUPPORTED / NOT SUPPORTED>
-REASON: <One clear sentence explaining the verification result>
+REASON: <One clear sentence a general reader would understand, written in plain language.
+Refer to "the answer" and "the source documents" — never use internal labels like
+"Candidate Answer" or "Document 1".>
 """
         self.validate_func = self.kernel.add_function(
             prompt=validation_prompt,

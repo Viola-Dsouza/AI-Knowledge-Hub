@@ -18,11 +18,14 @@ async def main():
 
     orchestrator = KnowledgeOrchestrator()
 
-    print("\n[1/3] Running Search Agent...")
-    print("[2/3] Running Summarization Agent (Semantic Kernel)...")
-    print("[3/3] Running Validation Agent (Semantic Kernel)...")
-
+    print("\nRunning multi-agent pipeline...")
     result = await orchestrator.run(question, folder_name)
+    primary = result.get("primary_sources", [])
+    fallback = result.get("fallback_sources", [])
+    router_line = f"Router selected: {', '.join(primary) or 'none'}"
+    if fallback:
+        router_line += f" -> found nothing, expanded to: {', '.join(fallback)}"
+    print(router_line)
 
     print("\n" + "=" * 60)
     print("                     ANSWER")
