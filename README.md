@@ -73,36 +73,7 @@ Employees can ask natural language questions about company policies, documents, 
 
 ---
 
-## 📁 Project Structure
 
-```
-AI-Knowledge-Hub/
-│
-├── .env                       # Environment credentials (API keys, endpoints)
-├── .env.example               # Template environment file
-├── requirements.txt           # Python dependencies
-├── README.md                  # Documentation and presentation guide
-│
-├── data/
-│   ├── seed_db.py             # Seeds knowledge_hub.db (run automatically if missing)
-│   ├── knowledge_hub.db       # SQLite demo database (committed fixture; regenerate via seed_db.py)
-│   └── wiki/                  # Local markdown how-to/FAQ docs
-│
-└── src/
-    ├── __init__.py
-    ├── config.py              # Configuration loader & validation helpers
-    ├── query_router.py        # Selects which source(s) a question needs
-    ├── search_agent.py        # Search Agent for Azure AI Search
-    ├── database_agent.py      # Database Agent for the SQLite employee directory
-    ├── wiki_agent.py          # Wiki Agent for local markdown how-to/FAQ docs
-    ├── summarizer_agent.py    # Summarization Agent (Semantic Kernel)
-    ├── validator_agent.py     # Validation Agent (Semantic Kernel)
-    ├── orchestrator.py        # Multi-Agent pipeline orchestrator
-    ├── app.py                 # Streamlit web application
-    └── main.py                # Terminal / CLI entry point
-```
-
----
 
 ## ⚙️ Prerequisites & Setup
 
@@ -123,15 +94,15 @@ pip install -r requirements.txt
 Verify or create your `.env` file in the root directory:
 ```env
 # Azure OpenAI
-AZURE_OPENAI_ENDPOINT=https://agentic-training2026.openai.azure.com/
+AZURE_OPENAI_ENDPOINT=your_openai_endpint
 AZURE_OPENAI_API_KEY=your_azure_openai_api_key
-AZURE_OPENAI_DEPLOYMENT=gpt-5-mini
-AZURE_OPENAI_API_VERSION=2024-12-01-preview
+AZURE_OPENAI_DEPLOYMENT=your_deployment_name
+AZURE_OPENAI_API_VERSION=your_api_version
 
 # Azure AI Search
-AZURE_SEARCH_ENDPOINT=https://docsearchsrvc.search.windows.net
+AZURE_SEARCH_ENDPOINT=your_search_endpoint
 AZURE_SEARCH_API_KEY=your_azure_search_api_key
-AZURE_SEARCH_INDEX_NAME=internpdfindexes
+AZURE_SEARCH_INDEX_NAME=your_index_name
 ```
 
 ---
@@ -149,17 +120,3 @@ Open your browser at `http://localhost:8501`.
 ```bash
 python src/main.py
 ```
-
----
-
-## 🧪 Sample Questions to Test & Demonstrate
-
-| Query Type | Sample Question | Expected Behavior |
-| :--- | :--- | :--- |
-| **Direct Fact** | *What is the company name?* | Retrieves `companypolicy.txt` $\rightarrow$ Answers `LARATECH CONSULTING SERVICES` $\rightarrow$ `SUPPORTED`. |
-| **Policy Query** | *What is the work-from-home policy?* | Retrieves `leave_policy.pdf` & `companypolicy.txt` $\rightarrow$ Details core hours, VPN requirements, up to 2 days/week $\rightarrow$ `SUPPORTED`. |
-| **Broad Summary** | *Summarize the documents* | Retrieves all documents under the folder $\rightarrow$ Provides structured summary of all 3 policies $\rightarrow$ `SUPPORTED`. |
-| **Security Query** | *What are the password requirements?* | Retrieves `security_policy.pdf` $\rightarrow$ Details 14+ characters, MFA requirements $\rightarrow$ `SUPPORTED`. |
-| **Database Query** | *How many employees are in the Engineering department?* | Router selects Database Agent $\rightarrow$ Queries `employees` table $\rightarrow$ Lists matching employees $\rightarrow$ `SUPPORTED`. |
-| **Wiki Query** | *How do I reset my password?* | Router selects Wiki Agent $\rightarrow$ Retrieves `it_support_faq.md` $\rightarrow$ `SUPPORTED`. |
-| **Out of Domain** | *What is the secret recipe for Coca-Cola?* | Answers *"Information not found in the provided documents."* $\rightarrow$ `NOT SUPPORTED`. |
